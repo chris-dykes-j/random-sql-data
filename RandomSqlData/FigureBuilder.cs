@@ -9,7 +9,9 @@ public class FigureBuilder
     private readonly List<string> _characterOptions;
     private readonly List<string> _brandOptions;
     private readonly List<string> _seriesOptions;
-
+    private long _janCode;
+    private readonly string[] _monthOptions;
+    
     public FigureBuilder()
     {
         _random = new Random();
@@ -17,6 +19,12 @@ public class FigureBuilder
         _characterOptions = new List<string> { "Miku", "Rem", "Sonico", "Ryza" };
         _brandOptions = new List<string> { "Good Smile", "Alter", "Broccoli" };
         _seriesOptions = CreateRandomSeriesOptions();
+        _janCode = 00_000_000_000;
+        _monthOptions = new[]
+        {
+            "January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+            "November", "December"
+        };
     }
 
     public FigureModel CreateRandomFigure()
@@ -26,14 +34,31 @@ public class FigureBuilder
         {
             Name = CreateRandomName(character),
             Character = character,
-            Brand = SelectRandomBrand(), /*
-            ReleaseDate = CreateRandomDate(),
-            JanCode = CreateUniqueJanCode(), */
+            Brand = SelectRandomBrand(),
+            ReleaseYear = CreateRandomDate(),
+            ReleaseMonth = ChooseRandomMonth(),
+            JanCode = CreateUniqueJanCodeNaive(),
             Series = ChooseRandomSeries(),
             ReleasePrice = CreateRandomPrice(),
             ProductLine = CreateRandomString(_random.Next(0, 20)),
             Sculptor = CreateRandomString(_random.Next(0, 15))
         };
+    }
+
+    private int CreateRandomDate()
+    {
+        return _random.Next(2005, 2024);
+    }
+
+    private string ChooseRandomMonth()
+    {
+        return _monthOptions[_random.Next(0, _monthOptions.Length - 1)];
+    }
+
+    private long CreateUniqueJanCodeNaive()
+    {
+        var countryCode = (_random.Next(0, 2) == 0) ? 45 : 49;
+        return (countryCode * 1_000_000_000_000) + _janCode++;
     }
 
     private string ChooseRandomSeries() => _seriesOptions[_random.Next(0, _seriesOptions.Count - 1)];
