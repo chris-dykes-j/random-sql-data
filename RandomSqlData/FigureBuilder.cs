@@ -9,8 +9,8 @@ public class FigureBuilder
     private readonly List<string> _characterOptions;
     private readonly List<string> _brandOptions;
     private readonly List<string> _seriesOptions;
-    private long _janCode;
     private readonly string[] _monthOptions;
+    private readonly JanCodeBuilder _janCodeBuilder;
     
     public FigureBuilder()
     {
@@ -19,12 +19,12 @@ public class FigureBuilder
         _characterOptions = new List<string> { "Miku", "Rem", "Sonico", "Ryza" };
         _brandOptions = new List<string> { "Good Smile", "Alter", "Broccoli" };
         _seriesOptions = CreateRandomSeriesOptions();
-        _janCode = 00_000_000_000;
         _monthOptions = new[]
         {
             "January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
             "November", "December"
         };
+        _janCodeBuilder = new JanCodeBuilder();
     }
 
     public FigureModel CreateRandomFigure()
@@ -37,7 +37,7 @@ public class FigureBuilder
             Brand = SelectRandomBrand(),
             ReleaseYear = CreateRandomDate(),
             ReleaseMonth = ChooseRandomMonth(),
-            JanCode = CreateUniqueJanCodeNaive(),
+            JanCode = _janCodeBuilder.CreateJanCode(),
             Series = ChooseRandomSeries(),
             ReleasePrice = CreateRandomPrice(),
             ProductLine = CreateRandomString(_random.Next(0, 20)),
@@ -53,12 +53,6 @@ public class FigureBuilder
     private string ChooseRandomMonth()
     {
         return _monthOptions[_random.Next(0, _monthOptions.Length - 1)];
-    }
-
-    private long CreateUniqueJanCodeNaive()
-    {
-        var countryCode = (_random.Next(0, 2) == 0) ? 45 : 49;
-        return (countryCode * 1_000_000_000_000) + _janCode++;
     }
 
     private string ChooseRandomSeries() => _seriesOptions[_random.Next(0, _seriesOptions.Count - 1)];
