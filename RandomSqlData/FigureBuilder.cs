@@ -1,5 +1,3 @@
-using System.Globalization;
-
 namespace RandomSqlData;
 
 public class FigureBuilder
@@ -45,35 +43,6 @@ public class FigureBuilder
         };
     }
 
-    private int CreateRandomDate()
-    {
-        return _random.Next(2005, 2024);
-    }
-
-    private string ChooseRandomMonth()
-    {
-        return _monthOptions[_random.Next(0, _monthOptions.Length - 1)];
-    }
-
-    private string ChooseRandomSeries() => _seriesOptions[_random.Next(0, _seriesOptions.Count - 1)];
-
-    private List<string> CreateRandomSeriesOptions()
-    {
-        var options = new List<string>();
-        using (var reader = new StreamReader("/home/chris/RiderProjects/RandomSqlData/anime.csv"))
-        {
-            while (!reader.EndOfStream)
-            {
-                var line = reader.ReadLine();
-                var values = line!.Split(",");
-                options.Add(values[1]);
-            }
-        }
-        return options;
-    }
-
-    private int CreateRandomPrice() => _random.Next(10_000, 50_000);
-
     private string CreateRandomName(string character)
     {
         var name = _nameOptions[_random.Next(0, _nameOptions.Length - 1)];
@@ -89,8 +58,31 @@ public class FigureBuilder
         }
         return result;
     }
-
+    
     private string SelectRandomCharacter() => _characterOptions[_random.Next(0, _characterOptions.Count - 1)];
 
     private string SelectRandomBrand() => _brandOptions[_random.Next(0, _brandOptions.Count - 1)];
+    
+    private int CreateRandomDate() => _random.Next(2005, 2024);
+
+    private string ChooseRandomMonth() => _monthOptions[_random.Next(0, _monthOptions.Length - 1)];
+
+    private string ChooseRandomSeries() => _seriesOptions[_random.Next(0, _seriesOptions.Count - 1)];
+
+    private int CreateRandomPrice() => _random.Next(10_000, 50_000);
+    
+    private List<string> CreateRandomSeriesOptions()
+    {
+        var options = new List<string>();
+        using (var reader = new StreamReader("/home/chris/RiderProjects/RandomSqlData/series.csv"))
+        {
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line!.Split(",");
+                options.Add(values[1]);
+            }
+        }
+        return options;
+    }
 }
